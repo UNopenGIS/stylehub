@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StyleHub</title>
+<link href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css" rel="stylesheet" />
+<style>
+  body { margin: 0; padding: 0; }
+  #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<script src="https://unpkg.com/maplibre-gl/dist/maplibre-gl.js"></script>
+<script type="module">
+import { Protocol } from 'https://cdn.skypack.dev/pmtiles'
+maplibregl.addProtocol('pmtiles', (new Protocol()).tile)
+
+document.addEventListener('DOMContentLoaded', function () {
+  const urlParams = new URLSearchParams(window.location.search)
+  const styleUrl = urlParams.get('style') || 'https://optgeo.github.io/terrain22/style.json'
+
+  const map = new maplibregl.Map({
+    container: 'map', style: styleUrl,
+    hash: true, maxPitch: 85
+  })
+  map.addControl(new maplibregl.FullscreenControl())
+  map.addControl(new maplibregl.NavigationControl())
+  map.addControl(new maplibregl.ScaleControl({ "unit": "metric" }))
+  map.addControl(new maplibregl.GeolocateControl())
+})
+</script>
+</body>
+</html>
